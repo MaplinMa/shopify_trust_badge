@@ -1,0 +1,355 @@
+<script
+  type="application/json"
+  data-section-type="dynamic-highlights-banners"
+  data-section-id="{{ section.id }}"
+></script>
+
+{% if section.blocks.size > 0 %}
+  <style>
+    /* #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.background_color }};
+    } */
+
+    #shopify-section-{{ section.id }} .highlights-banners {
+    background-color: {{ section.settings.inner_background_color }};
+    }
+
+    @media screen and (max-width: 500px) {
+    .highlights-banners-block{
+    padding-top: {{ section.settings.section_spacing_mobile }}px !important;
+    padding-bottom: {{ section.settings.section_spacing_mobile }}px !important;
+    }
+    }
+
+    @media screen and (min-width: 1024px) {
+    #shopify-section-{{section.id}} .highlights-banners {
+    padding-top: {{ section.settings.section_spacing_desktop }}px;
+    padding-bottom: {{ section.settings.section_spacing_desktop }}px;
+    }
+    }
+
+    #shopify-section-{{ section.id }} .highlights-banners-block {
+    color: {{ section.settings.color }};
+    }
+
+    #shopify-section-{{ section.id }} .highlights-banners-heading {
+    color: {{ section.settings.heading_color }};
+    }
+
+    #shopify-section-{{ section.id }} .highlights-banners-block::after {
+    background: {{ section.settings.dividers_color }};
+    }
+
+    #shopify-section-{{ section.id }} .highlights-banners-icon {
+    color: {{ section.settings.icon_color }};
+    }
+  </style>
+
+  <div class="highlights-banners-container">
+    <div
+      class="
+        highlights-banners
+        highlight-banners-count-{{ section.blocks.size }}
+        highlight-banners-align-{{ section.settings.text_alignment }}
+      "
+    >
+      {% for block in section.blocks %}
+        {% if block.settings.text != blank or block.settings.title != blank %}
+          <div
+            class="highlights-banners-block"
+            {{ block.shopify_attributes }}
+          >
+            {% capture block_icon %}
+    {% if block.settings.icon != 'none' or block.settings.image != blank %}
+    <div class="highlights-banners-icon">
+    {% if block.settings.image != blank %}
+    {%
+    include 'rimg',
+    class: 'highlights-banners-custom-icon',
+    img: block.settings.image,
+    size: 'x46'
+    %}
+    {% else %}
+    {% include 'icon-library', id: block.settings.icon %}
+    {% endif %}
+    </div>
+    {% endif %}
+    {% endcapture %}
+            {% unless section.settings.text_alignment == 'right' %}
+              {{ block_icon }}
+            {% endunless %}
+            <div class="highlights-banners-text">
+              {% if block.settings.title != blank %}
+                <span class="highlights-banners-heading">
+                  {{ block.settings.title | escape }}
+                </span>
+              {% endif %}
+
+              {% if block.settings.text != blank %}
+                {{ block.settings.text }}
+              {% endif %}
+            </div>
+            {% if section.settings.text_alignment == 'right' %}
+              {{ block_icon }}
+            {% endif %}
+            {% if block.settings.link != blank %}
+              <a
+                class="highlights-banners-block-link"
+                href="{{ block.settings.link }}"
+                {{ block.shopify_attributes }}
+              >
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "信任徽章",
+  "class": "highlights-banners--section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "section_spacing_desktop",
+      "label": "高度调节",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "section_spacing_mobile",
+      "label": "移动端高度调节",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "文字对齐方式",
+      "options": [
+        {
+          "value": "left",
+          "label": "文字在右"
+        },
+        {
+          "value": "center",
+          "label": "文字置底"
+        },
+        {
+          "value": "right",
+          "label": "文字在左"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "颜色"
+    },
+    {
+      "id": "heading_color",
+      "type": "color",
+      "label": "Heading 颜色",
+      "default": "#4d4d4d"
+    },
+    {
+      "id": "color",
+      "type": "color",
+      "label": "文字颜色",
+      "default": "#4d4d4d"
+    },
+    {
+      "id": "icon_color",
+      "type": "color",
+      "label": "图标颜色",
+      "default": "#4d4d4d"
+    },
+    {
+      "id": "dividers_color",
+      "type": "color",
+      "label": "分割线颜色",
+      "default": "#e3e3e3"
+    },
+    {
+      "id": "inner_background_color",
+      "type": "color",
+      "label": "Section 背景色",
+      "default": "#f8f8f8"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "highlight",
+      "name": "Highlight",
+      "settings": [
+        {
+          "id": "icon",
+          "type": "select",
+          "label": "内置 Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "No icon"
+            },
+            {
+              "value": "icon-cell-phone",
+              "label": "Cellphone"
+            },
+            {
+              "value": "icon-chat",
+              "label": "Chat"
+            },
+            {
+              "value": "icon-chat-alternate",
+              "label": "Chat alternate"
+            },
+            {
+              "value": "icon-credit-card",
+              "label": "Credit card"
+            },
+            {
+              "value": "icon-delivery",
+              "label": "Delivery"
+            },
+            {
+              "value": "icon-delivery-alt",
+              "label": "Delivery alternate"
+            },
+            {
+              "value": "icon-email",
+              "label": "Email"
+            },
+            {
+              "value": "icon-envelope",
+              "label": "Envelope"
+            },
+            {
+              "value": "icon-gift-card",
+              "label": "Gift card"
+            },
+            {
+              "value": "icon-heart",
+              "label": "Heart"
+            },
+            {
+              "value": "icon-label-tag",
+              "label": "Label tag"
+            },
+            {
+              "value": "icon-lock-alternate",
+              "label": "Lock"
+            },
+            {
+              "value": "icon-people",
+              "label": "People"
+            },
+            {
+              "value": "icon-people-alternate",
+              "label": "People alternate"
+            },
+            {
+              "value": "icon-pin",
+              "label": "Pin"
+            },
+            {
+              "value": "icon-question-mark",
+              "label": "Question mark"
+            },
+            {
+              "value": "icon-smile",
+              "label": "Smile"
+            },
+            {
+              "value": "icon-store",
+              "label": "Store"
+            },
+            {
+              "value": "icon-transfer",
+              "label": "Transfer"
+            },
+            {
+              "value": "icon-wallet",
+              "label": "Wallet"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "自定义 Image",
+          "info": "推荐使用 50x50 的图片，设置之后会替换上方选择的图标"
+        },
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Heading",
+          "default": "Highlight"
+        },
+        {
+          "id": "text",
+          "type": "richtext",
+          "label": "Text",
+          "default": "<p>Highlight text</p>"
+        },
+        {
+          "id": "link",
+          "type": "url",
+          "label": "Link"
+        }
+      ],
+      "limit": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "信任徽章-LF",
+      "category": "Advanced",
+      "blocks": [
+        {
+          "type": "highlight",
+          "settings": {
+            "icon": "icon-delivery",
+            "title": "Free shipping",
+            "text": "<p>When you spend $100+</p>"
+          }
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "icon": "icon-cell-phone",
+            "title": "Give us a call",
+            "text": "<p>+1 (201) 555-5555</p>"
+          }           
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "icon": "icon-chat-alternate",
+            "title": "Chat with us",
+            "text": "<p>We offer 24-hour chat support</p>"
+          }
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "icon": "icon-pin",
+            "title": "Locations",
+            "text": "<p>Find a store near you</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
